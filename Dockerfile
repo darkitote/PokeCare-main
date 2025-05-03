@@ -1,18 +1,31 @@
-FROM node:18-alpine AS builder
+# 1️⃣ Usamos una imagen ligera de Node.js
+FROM node:18-alpine AS builder  
 
-WORKDIR /app
+# 2️⃣ Establecemos el directorio de trabajo
+WORKDIR /app  
+
+# 3️⃣ Copiamos los archivos de configuración
 COPY package.json package-lock.json ./
 
-# 🔥 Instalamos dependencias desde cero dentro de Docker
-RUN npm install --production --legacy-peer-deps
+# 4️⃣ Instalamos las dependencias
+RUN npm install --production --legacy-peer-deps  
 
+# 5️⃣ Copiamos el código de la aplicación
 COPY . .
 
-# 🔥 Aseguramos que esbuild se instala correctamente en Linux
-RUN npm rebuild esbuild
+# 6️⃣ Aseguramos que esbuild se instale correctamente en Linux
+RUN npm rebuild esbuild  
 
-# 🔥 Compilamos la aplicación
-RUN npm run build
+# 7️⃣ Definimos la variable de entorno BASE_URL para que siempre use `/PokeCare-main/`
+ENV BASE_URL="/PokeCare-main/"
 
-EXPOSE 3000
-CMD ["npm", "run", "preview"]
+# 8️⃣ Compilamos la aplicación
+RUN npm run build  
+
+# 9️⃣ Instalamos `serve` para servir la aplicación en producción
+RUN npm install -g serve  
+
+# 🔟 Exponemos el puerto 3000
+EXPOSE 3000  
+
+# 🔥 Usamos `serve` para servir los archivos correctamente
