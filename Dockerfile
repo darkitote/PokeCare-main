@@ -1,18 +1,20 @@
 FROM node:18-alpine AS builder  
 WORKDIR /app  
 
-# 🔹 Copiar archivos y construir la aplicación
-COPY . .
+# Copiar archivos y construir la aplicación
+COPY package.json package-lock.json ./
 RUN npm install --omit=dev  
+
+COPY . .  
 RUN npm run build  
 
-# 🔹 Copiar `index.html` a `dist/` para garantizar que esté en la imagen final
+# 🔹 Copiar `index.html` dentro de `dist/`
 RUN cp index.html dist/index.html  
 
-# 🔹 Ajustar permisos y usuario seguro
+# Ajustar permisos y usuario seguro
 RUN chown -R node:node /app  
 USER node  
 
-# 🔹 Configurar el servidor
+# Exponer el puerto y ejecutar el servidor
 EXPOSE 3000  
 CMD ["node", "server.cjs"]
