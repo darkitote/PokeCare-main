@@ -28,4 +28,7 @@ RUN npm install -g serve
 # 🔟 Exponemos el puerto 3000
 EXPOSE 3000  
 
+# 🔥 Usamos `serve` para servir los archivos correctamente en el puerto 3000
+CMD ["serve", "-s", "dist", "-l", "3000"]
+
 # 🔥 Usamos `serve` para servir los archivos correctamente
