@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react'; // 🔹 Asegurar la importación de React
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.BASE_URL || "/PokeCare-main/",
+  base: "/PokeCare-main/",
   server: {
     port: 3000,
     host: "0.0.0.0",
@@ -13,8 +13,8 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    assetsDir: "assets",
-    manifest: true, // 🔹 Se mantiene activado para generar `manifest.json`
+    assetsDir: "assets", // ✅ Forzamos que los assets estén en `dist/assets/`
+    manifest: true, // ✅ Activa la generación del `manifest.json` en `dist/assets/`
     rollupOptions: {
       output: {
         entryFileNames: 'assets/[name].js',
@@ -23,5 +23,5 @@ export default defineConfig({
       }
     }
   },
-  cacheDir: "node_modules/.vite", // 🔹 Evita que Vite almacene archivos ocultos en `.vite/`
+  cacheDir: "node_modules/.vite"
 });
