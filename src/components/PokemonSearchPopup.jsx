@@ -1,80 +1,73 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
-const PokemonDetailsPopup = ({ pokemonId, onClose }) => {
-  const [pokemonDetails, setPokemonDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const PokemonSearchPopup = ({ onAddPokemon, onClose }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
-  useEffect(() => {
-    if (!pokemonId) return; // Evita solicitud innecesaria
+  const searchPokemon = async () => {
+    if (!searchTerm.trim()) return;
+    
+    setIsSearching(true);
+    try {
+      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
+      setSearchResults([response.data]);
+    } catch (error) {
+      setSearchResults([]);
+      alert('Pokémon no encontrado');
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
-    const fetchPokemonDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
-        setPokemonDetails(response.data);
-      } catch (err) {
-        setError(`Error al cargar los detalles: ${err.response?.status} - ${err.message}`);
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPokemonDetails();
-  }, [pokemonId]);
-
-  if (loading) return <div className="popup-loading">Cargando...</div>;
-  if (error) return <div className="popup-error">{error}</div>;
-
-  const pokemonImage = pokemonDetails.sprites?.other?.['official-artwork']?.front_default || 
-                       pokemonDetails.sprites?.front_default || 
-                       "default-image.png"; // Imagen por defecto
+  const handleAdd = (pokemon) => {
+    onAddPokemon({
+      id: pokemon.id,
+      name: pokemon.name,
+      sprites: pokemon.sprites,
+    });
+    setSearchTerm('');
+    setSearchResults([]);
+  };
 
   return (
-    <div className="pokemon-details-popup">
-      <button className="close-popup" onClick={onClose} aria-label="Cerrar detalles de Pokémon">×</button>
-      
-      <div className="pokemon-header">
-        <img src={pokemonImage} alt={pokemonDetails.name} className="pokemon-detail-image"/>
-        <h2 className="pokemon-name">{pokemonDetails.name}</h2>
-        <div className="pokemon-types">
-          {pokemonDetails.types.map((type, index) => (
-            <span key={index} className={`type-badge type-${type.type.name}`}>
-              {type.type.name}
-            </span>
-          ))}
+    <div className="popup-overlay">
+      <div className="search-popup">
+        <button className="close-popup" onClick={onClose}>×</button>
+        <h3>Buscar Pokémon para agregar</h3>
+        <div className="popup-search-box">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Nombre o número"
+            onKeyPress={(e) => e.key === 'Enter' && searchPokemon()}
+          />
+          <button onClick={searchPokemon} disabled={isSearching}>
+            {isSearching ? 'Buscando...' : 'Buscar'}
+          </button>
         </div>
-      </div>
-
-      <div className="pokemon-stats">
-        <h3>Estadísticas</h3>
-        <div className="stats-grid">
-          {pokemonDetails.stats.map((stat, index) => (
-            <div key={index} className="stat-item">
-              <span className="stat-name">{stat.stat.name}</span>
-              <div className="stat-bar-container">
-                <div className="stat-bar" style={{ width: `${Math.min(100, stat.base_stat)}%` }}></div>
-                <span className="stat-value">{stat.base_stat}</span>
+        
+        {searchResults.length > 0 && (
+          <div className="popup-search-results">
+            {searchResults.map((pokemon) => (
+              <div key={pokemon.id} className="popup-pokemon-result">
+                <img 
+                  src={pokemon.sprites.front_default} 
+                  alt={pokemon.name} 
+                />
+                <h4>{pokemon.name}</h4>
+                <button onClick={() => handleAdd(pokemon)}>
+                  Agregar
+                </button>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="pokemon-abilities">
-        <h3>Habilidades</h3>
-        <div className="abilities-list">
-          {pokemonDetails.abilities.map((ability, index) => (
-            <span key={index} className="ability-badge">
-              {ability.ability.name}
-            </span>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default PokemonDetailsPopup;
+export default PokemonSearchPopup;
