@@ -2,8 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// Servir archivos estáticos correctamente con el tipo MIME adecuado
-app.use(express.static(path.join(__dirname, 'dist'), {
+// Servir archivos estáticos correctamente
+app.use('/assets', express.static(path.join(__dirname, 'dist/assets'), {
   setHeaders: (res, filePath) => {
     if (filePath.endsWith('.js')) {
       res.setHeader('Content-Type', 'application/javascript');
@@ -14,12 +14,12 @@ app.use(express.static(path.join(__dirname, 'dist'), {
   }
 }));
 
-// Manejo de rutas para evitar que todo se redirija a index.html
-app.get('*', (req, res) => {
+// Manejo de rutas para evitar la redirección incorrecta
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 // Iniciar el servidor en el puerto 3000
 app.listen(3000, () => {
-  console.log('Servidor corriendo en puerto 3000');
+  console.log('✅ Servidor corriendo en puerto 3000 🚀🔥');
 });
