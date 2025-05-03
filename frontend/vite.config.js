@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/",  
+  base: "./",
   server: {
     port: 3000,
     host: "0.0.0.0",
@@ -15,9 +15,9 @@ export default defineConfig({
     outDir: "dist",
     assetsDir: "assets",
     manifest: true,
+    publicDir: false,  
     rollupOptions: {
-      input: "src/index.html", 
-      main: "src/main.jsx", // ✅ Asegura que `index.html` esté en `dist/`
+      input: "index.html",  
       output: {
         entryFileNames: "assets/[name].js",
         chunkFileNames: "assets/[name].js",

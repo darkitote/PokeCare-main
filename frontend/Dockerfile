@@ -1,20 +1,19 @@
-# 🔹 Construcción del frontend con Vite
 FROM node:18-alpine AS builder  
 WORKDIR /app  
 
-# 🔹 Copiar archivos fuente  
 COPY package.json package-lock.json ./  
 RUN npm install  
 
-# 🔹 Copiar el código fuente y compilar  
 COPY . .  
 RUN npm run build  
 
-# 🔹 Servir archivos con Nginx  
-FROM nginx:alpine  
-COPY --from=builder /app/dist /usr/share/nginx/html  
+RUN rm -rf /app/dist/public /app/dist/src  
 
-# 🔹 Configurar Nginx correctamente para servir la app
+FROM nginx:alpine  
+
+COPY --from=builder /app/dist/index.html /usr/share/nginx/html/
+COPY --from=builder /app/dist/assets /usr/share/nginx/html/assets
+
 RUN echo 'server { \
     listen 80; \
     server_name localhost; \

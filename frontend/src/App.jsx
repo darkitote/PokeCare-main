@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import PokemonDaycare from './components/PokemonDaycare';
@@ -7,12 +7,29 @@ import './App.css';
 function App() {
   const [pokemons, setPokemons] = useState([]);
 
+  useEffect(() => {
+    const fetchPokemons = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL || 'http://poke-care-backend:3000'}/api/pokemons?limit=20`);
+        const data = await response.json();
+        setPokemons(data.map(pokemon => ({
+          id: pokemon.id,
+          name: pokemon.name,
+          sprites: pokemon.sprites,
+        })));
+      } catch (error) {
+        console.error("Error al obtener Pokémon:", error);
+      }
+    };
+
+    fetchPokemons();
+  }, []);
+
   const addPokemon = (pokemonData) => {
     if (pokemons.some(p => p.id === pokemonData.id)) {
       console.error(`El Pokémon ${pokemonData.name} ya está en la guardería.`);
       return;
     }
-
     setPokemons(prev => [...prev, { ...pokemonData, nickname: pokemonData.name }]);
   };
 
@@ -34,7 +51,6 @@ function App() {
         <header className="app-header">
           <h1>PokeCare - Guardería Pokémon</h1>
         </header>
-
         <div className="main-content">
           <PokemonDaycare 
             pokemons={pokemons} 
