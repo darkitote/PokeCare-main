@@ -1,26 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="./vite.svg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeCare</title>
-    <base href="/PokeCare-main/"> <!-- 🔹 Asegura rutas correctas en Docker/Kubernetes -->
-</head>
-<body>
-    <div id="root"></div>
+<script type="module">
+    fetch("/PokeCare-main/assets/manifest.json")
+        .then(response => response.json())
+        .then(manifest => {
+            console.log("Manifest cargado:", manifest); // 🔹 Debugging
+            const entryFile = manifest["src/main.jsx"]?.file;
 
-    <!-- 🔹 Carga dinámica del archivo generado por Vite -->
-    <script type="module">
-        fetch("/PokeCare-main/assets/manifest.json")
-            .then(response => response.json())
-            .then(manifest => {
-                const script = document.createElement("script");
-                script.type = "module";
-                script.src = `/PokeCare-main/assets/${manifest["src/main.jsx"].file}`;
-                document.body.appendChild(script);
-            })
-            .catch(error => console.error("Error cargando el script:", error));
-    </script>
-</body>
-</html>
+            if (!entryFile) {
+                console.error("Error: `manifest.json` no tiene la propiedad esperada.");
+                return;
+            }
+
+            const script = document.createElement("script");
+            script.type = "module";
+            script.src = `/PokeCare-main/${entryFile}`;
+            document.body.appendChild(script);
+        })
+        .catch(error => console.error("Error cargando el script:", error));
+</script>
