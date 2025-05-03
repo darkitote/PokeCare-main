@@ -14,18 +14,14 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsDir: "assets",
-    manifest: true, // 🔹 Esto asegura que `manifest.json` se genere correctamente
+    manifest: true, // 🔹 Se mantiene activado para generar `manifest.json`
     rollupOptions: {
       output: {
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
         assetFileNames: 'assets/[name].[ext]',
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        }
       }
     }
-  }
+  },
+  cacheDir: "node_modules/.vite", // 🔹 Evita que Vite almacene archivos ocultos en `.vite/`
 });
