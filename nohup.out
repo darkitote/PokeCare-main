@@ -1,0 +1,26 @@
+|-----------|-----------|-------------|---------------------------|
+| NAMESPACE |   NAME    | TARGET PORT |            URL            |
+|-----------|-----------|-------------|---------------------------|
+| default   | poke-care |        3000 | http://192.168.49.2:30981 |
+|-----------|-----------|-------------|---------------------------|
+* Starting tunnel for service poke-care.
+|-----------|-----------|-------------|------------------------|
+| NAMESPACE |   NAME    | TARGET PORT |          URL           |
+|-----------|-----------|-------------|------------------------|
+| default   | poke-care |             | http://127.0.0.1:61378 |
+|-----------|-----------|-------------|------------------------|
+* Opening service default/poke-care in default browser...
+! Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
+|-----------|-----------|-------------|---------------------------|
+| NAMESPACE |   NAME    | TARGET PORT |            URL            |
+|-----------|-----------|-------------|---------------------------|
+| default   | poke-care |        3000 | http://192.168.49.2:30981 |
+|-----------|-----------|-------------|---------------------------|
+* Starting tunnel for service poke-care.
+|-----------|-----------|-------------|------------------------|
+| NAMESPACE |   NAME    | TARGET PORT |          URL           |
+|-----------|-----------|-------------|------------------------|
+| default   | poke-care |             | http://127.0.0.1:61417 |
+|-----------|-----------|-------------|------------------------|
+* Opening service default/poke-care in default browser...
+! Because you are using a Docker driver on darwin, the terminal needs to be open to run it.
