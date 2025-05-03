@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-const BASE_URL = "/PokeCare-main";  // 🔹 Definir la ruta base
+const BASE_URL = "/PokeCare-main"; // 🔹 Definir la ruta base
 
 // Servir archivos estáticos correctamente
 app.use(BASE_URL + '/assets', express.static(path.join(__dirname, 'dist/assets'), {
@@ -24,9 +24,9 @@ app.get(BASE_URL + '/', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// Manejo de cualquier otra ruta para evitar errores 404
+// 🔹 Nueva solución: Enviar `index.html` en cualquier ruta desconocida en lugar de redireccionar
 app.get('*', (req, res) => {
-  res.redirect(BASE_URL + '/');
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 app.listen(3000, () => {

@@ -1,6 +1,3 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-
 export default defineConfig({
   plugins: [react()],
   base: process.env.BASE_URL || "/PokeCare-main/",
@@ -14,12 +11,17 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsDir: "assets",
-    manifest: true, // 🔹 Esto garantiza que Vite genere `manifest.json`
+    manifest: true, // 🔹 Esto asegura que `manifest.json` se genere correctamente
     rollupOptions: {
       output: {
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
+        assetFileNames: 'assets/[name].[ext]',
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        }
       }
     }
   }

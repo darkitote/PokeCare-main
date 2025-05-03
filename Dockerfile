@@ -4,19 +4,21 @@ FROM node:18-alpine AS builder
 # 2️⃣ Establecemos el directorio de trabajo
 WORKDIR /app  
 
-# 3️⃣ Copiamos los archivos de configuración
-COPY package.json package-lock.json ./
+# 3️⃣ Creamos un usuario sin privilegios para mejorar la seguridad
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser  
 
-# 4️⃣ Instalamos las dependencias
-RUN npm install --production --legacy-peer-deps  
+# 4️⃣ Copiamos los archivos de configuración y aseguramos instalación limpia
+COPY package.json package-lock.json ./
+RUN npm ci --production  
 
 # 5️⃣ Copiamos el código de la aplicación
-COPY . .
+COPY . .  
 
 # 6️⃣ Aseguramos que esbuild se instale correctamente en Linux
 RUN npm rebuild esbuild  
 
-# 7️⃣ Definimos la variable de entorno BASE_URL para que siempre use `/PokeCare-main/`
+# 7️⃣ Definimos la variable de entorno BASE_URL
 ENV BASE_URL="/PokeCare-main/"
 
 # 8️⃣ Compilamos la aplicación
@@ -25,5 +27,5 @@ RUN npm run build
 # 9️⃣ Exponemos el puerto 3000
 EXPOSE 3000  
 
-# 🔟 Usamos `server.cjs` para servir los archivos correctamente
-CMD ["node", "server.cjs"]
+# 🔟 Mejor manejador de procesos para mayor estabilidad
+ENTRYPOINT ["node", "server.cjs"]
