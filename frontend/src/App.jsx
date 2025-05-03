@@ -10,7 +10,8 @@ function App() {
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL || 'http://poke-care-backend:3000'}/api/pokemons?limit=20`);
+        const BASE_URL = import.meta.env.VITE_API_URL;
+        const response = await fetch(`${BASE_URL}/pokemons?limit=20`);
         const data = await response.json();
         setPokemons(data.map(pokemon => ({
           id: pokemon.id,

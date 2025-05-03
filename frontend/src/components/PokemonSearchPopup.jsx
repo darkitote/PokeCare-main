@@ -4,14 +4,14 @@ import axios from 'axios';
 const PokemonSearchPopup = ({ onAddPokemon, onClose }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = (false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const searchPokemon = async () => {
     if (!searchTerm.trim()) return;
     
     setIsSearching(true);
     try {
-      const apiUrl = `${process.env.REACT_APP_BASE_URL || 'http://poke-care-backend:3000/api/pokemon'}/${searchTerm.toLowerCase()}`;
+      const apiUrl = `${import.meta.env.VITE_API_URL}/pokemon/${searchTerm.toLowerCase()}`;
       const response = await axios.get(apiUrl);
       setSearchResults([response.data]);
     } catch (error) {
@@ -54,9 +54,7 @@ const PokemonSearchPopup = ({ onAddPokemon, onClose }) => {
               <div key={pokemon.id} className="popup-pokemon-result">
                 <img src={pokemon.sprites?.front_default} alt={pokemon.name} />
                 <h4>{pokemon.name}</h4>
-                <button onClick={() => handleAdd(pokemon)}>
-                  Agregar
-                </button>
+                <button onClick={() => handleAdd(pokemon)}>Agregar</button>
               </div>
             ))}
           </div>

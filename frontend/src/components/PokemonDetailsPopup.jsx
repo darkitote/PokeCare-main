@@ -10,7 +10,7 @@ const PokemonDetailsPopup = ({ pokemonId, onClose }) => {
     const fetchPokemonDetails = async () => {
       try {
         setLoading(true);
-        const apiUrl = `${process.env.REACT_APP_BASE_URL || 'http://poke-care-backend:3000/api/pokemon'}/${pokemonId}`;
+        const apiUrl = `${import.meta.env.VITE_API_URL}/pokemon/${pokemonId}`;
         const response = await axios.get(apiUrl);
         setPokemonDetails(response.data);
       } catch (err) {

@@ -21,23 +21,10 @@ const PokemonCard = ({ pokemon, index, onRemove, onMove, onClick }) => {
   });
 
   return (
-    <div
-      ref={(node) => drag(drop(node))}
-      className={`pokemon-card ${isDragging ? 'dragging' : ''}`}
-      onClick={() => onClick(pokemon.id)}
-    >
-      <img 
-        src={`${process.env.BASE_URL}${pokemon.sprites.front_default}`} 
-        alt={pokemon.name} 
-        className="pokemon-image"
-      />
+    <div ref={(node) => drag(drop(node))} className={`pokemon-card ${isDragging ? 'dragging' : ''}`} onClick={() => onClick(pokemon.id)}>
+      <img src={`${import.meta.env.VITE_API_URL}${pokemon.sprites.front_default}`} alt={pokemon.name} className="pokemon-image" />
       <h3>{pokemon.name}</h3>
-      <button onClick={(e) => {
-        e.stopPropagation();
-        onRemove(pokemon.id);
-      }} className="remove-btn">
-        Liberar
-      </button>
+      <button onClick={(e) => { e.stopPropagation(); onRemove(pokemon.id); }} className="remove-btn">Liberar</button>
     </div>
   );
 };

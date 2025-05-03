@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 const DaycareSearch = ({ onSearch, currentSearch }) => {
   const [inputValue, setInputValue] = useState(currentSearch);
 
-  // Sincroniza cuando cambia la prop
   useEffect(() => {
     setInputValue(currentSearch);
   }, [currentSearch]);
@@ -29,13 +28,10 @@ const DaycareSearch = ({ onSearch, currentSearch }) => {
         className="search-input"
       />
       {inputValue && (
-        <button onClick={handleClear} className="clear-search-btn">
-          ×
-        </button>
+        <button onClick={handleClear} className="clear-search-btn">×</button>
       )}
     </div>
   );
 };
 
 export default DaycareSearch;
-

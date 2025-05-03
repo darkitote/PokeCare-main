@@ -7,23 +7,26 @@ export default defineConfig({
   server: {
     port: 3000,
     host: "0.0.0.0",
-    hmr: {
-      clientPort: 443,
+    proxy: {
+      "/api": "http://10.101.17.41:3000" // Redirección al backend
     },
+    hmr: {
+      clientPort: 3000,
+    }
   },
   build: {
     outDir: "dist",
     assetsDir: "assets",
     manifest: true,
-    publicDir: false,  
+    publicDir: false,
     rollupOptions: {
-      input: "index.html",  
+      input: "index.html",
       output: {
         entryFileNames: "assets/[name].js",
         chunkFileNames: "assets/[name].js",
-        assetFileNames: "assets/[name].[ext]",
-      },
-    },
+        assetFileNames: "assets/[name].[ext]"
+      }
+    }
   },
-  cacheDir: "node_modules/.vite",
+  cacheDir: "node_modules/.vite"
 });
