@@ -10,11 +10,12 @@ const PokemonDetailsPopup = ({ pokemonId, onClose }) => {
     const fetchPokemonDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+        const apiUrl = `${process.env.REACT_APP_BASE_URL || 'https://pokeapi.co/api/v2'}/pokemon/${pokemonId}`;
+        const response = await axios.get(apiUrl);
         setPokemonDetails(response.data);
       } catch (err) {
         setError('Error al cargar los detalles del Pokémon');
-        console.error(err);
+        console.error("Error en API:", err);
       } finally {
         setLoading(false);
       }
@@ -32,8 +33,8 @@ const PokemonDetailsPopup = ({ pokemonId, onClose }) => {
       
       <div className="pokemon-header">
         <img 
-          src={pokemonDetails.sprites.other['official-artwork'].front_default || 
-               pokemonDetails.sprites.front_default} 
+          src={pokemonDetails.sprites?.other?.['official-artwork']?.front_default || 
+               pokemonDetails.sprites?.front_default} 
           alt={pokemonDetails.name}
           className="pokemon-detail-image"
         />

@@ -27,7 +27,7 @@ const PokemonCard = ({ pokemon, index, onRemove, onMove, onClick }) => {
       onClick={() => onClick(pokemon.id)}
     >
       <img 
-        src={pokemon.sprites.front_default} 
+        src={`${process.env.BASE_URL}${pokemon.sprites.front_default}`} 
         alt={pokemon.name} 
         className="pokemon-image"
       />

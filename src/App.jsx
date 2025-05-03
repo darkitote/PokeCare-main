@@ -6,20 +6,18 @@ import './App.css';
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
-  
+
   const addPokemon = (pokemonData) => {
     if (pokemons.some(p => p.id === pokemonData.id)) {
-      alert('Este Pokémon ya está en la guardería');
+      console.error(`El Pokémon ${pokemonData.name} ya está en la guardería.`);
       return;
     }
-    
+
     setPokemons(prev => [...prev, {
       ...pokemonData,
-      // Asegurar que siempre tenga un nickname
       nickname: pokemonData.name
     }]);
   };
-
 
   const removePokemon = (id) => {
     setPokemons(pokemons.filter(pokemon => pokemon.id !== id));
@@ -36,11 +34,10 @@ function App() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="app">
-        <title>PokeCare</title>
         <header className="app-header">
-          <h1>Guardería Pokémon</h1>
+          <h1>PokeCare - Guardería Pokémon</h1>
         </header>
-        
+
         <div className="main-content">
           <PokemonDaycare 
             pokemons={pokemons} 

@@ -11,11 +11,12 @@ const PokemonSearchPopup = ({ onAddPokemon, onClose }) => {
     
     setIsSearching(true);
     try {
-      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
+      const apiUrl = `${process.env.REACT_APP_BASE_URL || 'https://pokeapi.co/api/v2'}/pokemon/${searchTerm.toLowerCase()}`;
+      const response = await axios.get(apiUrl);
       setSearchResults([response.data]);
     } catch (error) {
       setSearchResults([]);
-      alert('Pokémon no encontrado');
+      console.error("Error al buscar Pokémon:", error);
     } finally {
       setIsSearching(false);
     }
@@ -54,7 +55,7 @@ const PokemonSearchPopup = ({ onAddPokemon, onClose }) => {
             {searchResults.map((pokemon) => (
               <div key={pokemon.id} className="popup-pokemon-result">
                 <img 
-                  src={pokemon.sprites.front_default} 
+                  src={pokemon.sprites?.front_default} 
                   alt={pokemon.name} 
                 />
                 <h4>{pokemon.name}</h4>

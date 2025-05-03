@@ -38,3 +38,4 @@ const DaycareSearch = ({ onSearch, currentSearch }) => {
 };
 
 export default DaycareSearch;
+
