@@ -26,4 +26,4 @@ RUN npm run build
 EXPOSE 3000  
 
 # 🔟 Usamos `server.js` para servir los archivos correctamente
-CMD ["node", "server.js"]
+CMD ["node", "server.cjs"]
