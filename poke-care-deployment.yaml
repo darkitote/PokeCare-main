@@ -26,6 +26,8 @@ spec:
           env:
             - name: PORT
               value: "3000"
+            - name: BASE_URL
+              value: "/PokeCare-main/"  # 🔹 Se agrega la variable BASE_URL aquí
           resources:
             requests:
               memory: "256Mi"
