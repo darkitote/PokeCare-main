@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poke-care
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: poke-care
+  template:
+    metadata:
+      labels:
+        app: poke-care
+    spec:
+      containers:
+        - name: poke-care
+          image: darkitote/pokecare:latest  
+          ports:
+            - containerPort: 3000
