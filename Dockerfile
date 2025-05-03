@@ -8,10 +8,10 @@ WORKDIR /app
 COPY package.json package-lock.json ./  
 
 # 4️⃣ Instalamos las dependencias dentro del contenedor
-RUN npm ci --production  
+RUN npm install --omit=dev  
 
 # 5️⃣ **Forzamos la instalación de `esbuild` directamente en la arquitectura Linux**
-RUN npm uninstall esbuild && npm install esbuild --platform=linux-arm64  
+RUN npm uninstall esbuild && npm install esbuild --platform=linux  
 
 # 6️⃣ Copiamos el código de la aplicación después de instalar dependencias
 COPY . .  
@@ -29,4 +29,4 @@ RUN npm run build
 EXPOSE 3000  
 
 # 13️⃣ Usamos `server.cjs` para servir los archivos correctamente
-ENTRYPOINT ["node", "server.cjs"]
+CMD ["node", "server.cjs"]

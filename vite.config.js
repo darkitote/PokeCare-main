@@ -13,9 +13,12 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    assetsDir: "assets", // ✅ Forzamos que los assets estén en `dist/assets/`
-    manifest: true, // ✅ Activa la generación del `manifest.json` en `dist/assets/`
+    assetsDir: "assets",
+    manifest: "assets/manifest.json", // ✅ Forzar la ubicación correcta
     rollupOptions: {
+      input: {
+        main: "src/main.jsx", // 🔹 Asegura que `src/main.jsx` se incluya en el `manifest.json`
+      },
       output: {
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',

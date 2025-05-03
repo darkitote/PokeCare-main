@@ -9,5 +9,4 @@ spec:
     - protocol: TCP
       port: 3000        # Puerto accesible desde fuera del pod
       targetPort: 3000  # Puerto dentro del contenedor
-      nodePort: 32000   # Puerto en el nodo (solo en NodePort)
-  type: NodePort
+  type: LoadBalancer  # 🔹 Se actualiza de `NodePort` a `LoadBalancer`

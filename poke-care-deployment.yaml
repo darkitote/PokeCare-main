@@ -20,14 +20,14 @@ spec:
       restartPolicy: Always
       containers:
         - name: poke-care
-          image: darkitote/pokecare:latest  
+          image: darkitote/pokecare:latest  # 🔹 Se actualiza con la imagen recién subida
           ports:
             - containerPort: 3000
           env:
             - name: PORT
               value: "3000"
             - name: BASE_URL
-              value: "/PokeCare-main/"  # 🔹 Se agrega la variable BASE_URL aquí
+              value: "/PokeCare-main/"  # 🔹 Se mantiene la variable BASE_URL
           resources:
             requests:
               memory: "256Mi"

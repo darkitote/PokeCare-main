@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// 🔹 Definir la ruta base
 const BASE_URL = "/PokeCare-main";
 
 // 🔹 Servir archivos estáticos correctamente
@@ -17,20 +16,14 @@ app.use(BASE_URL + '/assets', express.static(path.join(__dirname, 'dist/assets')
     if (filePath.endsWith('.json')) {
       res.setHeader('Content-Type', 'application/json');
     }
+    if (filePath.endsWith('.png')) {
+      res.setHeader('Content-Type', 'image/png');
+    }
+    if (filePath.endsWith('.svg')) {
+      res.setHeader('Content-Type', 'image/svg+xml');
+    }
   }
 }));
-
-// 🔹 Manejo de rutas con parámetros dinámicos
-app.get(BASE_URL + '/user/:id', (req, res) => {
-  const userId = req.params.id;
-  
-  // ✅ Validación de parámetros para evitar errores con `path-to-regexp`
-  if (!userId || isNaN(userId)) {
-    return res.status(400).json({ error: "ID de usuario inválido o faltante" });
-  }
-
-  res.json({ message: `Usuario ID: ${userId}` });
-});
 
 // 🔹 Servir `index.html` en la ruta principal
 app.get(BASE_URL + '/', (req, res) => {
