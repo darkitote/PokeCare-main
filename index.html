@@ -9,6 +9,18 @@
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/assets/index.js"></script> <!-- 🔹 Ajustado para cargar correctamente los archivos construidos -->
+
+    <!-- 🔹 Carga dinámica del archivo generado por Vite -->
+    <script type="module">
+        fetch("/assets/manifest.json")
+            .then(response => response.json())
+            .then(manifest => {
+                const script = document.createElement("script");
+                script.type = "module";
+                script.src = `/assets/${manifest["src/main.jsx"].file}`;
+                document.body.appendChild(script);
+            })
+            .catch(error => console.error("Error cargando el script:", error));
+    </script>
 </body>
 </html>
