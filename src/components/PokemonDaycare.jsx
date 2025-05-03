@@ -6,26 +6,19 @@ import DaycareSearch from './DaycareSearch';
 import PokemonDetailsPopup from './PokemonDetailsPopup';
 
 const PokemonDaycare = ({ pokemons, onRemovePokemon, onMovePokemon, onAddPokemon }) => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [showAddPopup, setShowAddPopup] = useState(false);
+  const [popupType, setPopupType] = useState(null);
   const [selectedPokemonId, setSelectedPokemonId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredPokemons, setFilteredPokemons] = useState([...pokemons]);
+  const [filteredPokemons, setFilteredPokemons] = useState([]);
 
-  // Efecto principal para sincronización
+  // Optimizar el filtro de búsqueda
   useEffect(() => {
-    const filtered = searchTerm 
-      ? pokemons.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-      : [...pokemons];
-    setFilteredPokemons(filtered);
+    if (!searchTerm) {
+      setFilteredPokemons(pokemons);
+    } else {
+      setFilteredPokemons(pokemons.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase())));
+    }
   }, [pokemons, searchTerm]);
-
-  // Función para agregar nuevo Pokémon
-  const handleAddPokemon = (pokemon) => {
-    onAddPokemon(pokemon); // Actualiza la lista principal
-    setSearchTerm(''); // Resetea el filtro
-    setShowPopup(false);
-  };
 
   return (
     <div className="daycare-container">
@@ -34,30 +27,24 @@ const PokemonDaycare = ({ pokemons, onRemovePokemon, onMovePokemon, onAddPokemon
           <h2>Guardería ({pokemons.length})</h2>
           <button 
             className="add-pokemon-btn"
-            onClick={() => setShowPopup(true)}
+            onClick={() => setPopupType("add")}
             title="Agregar Pokémon"
+            aria-label="Agregar Pokémon a la guardería"
           >
-            <IoIosAddCircleOutline className='add-icon'/> 
+            <IoIosAddCircleOutline className="add-icon"/>
           </button>
         </div>
 
         <DaycareSearch onSearch={setSearchTerm} currentSearch={searchTerm} />
       </div>
 
-      {showPopup && (
-        <PokemonSearchPopup
-          onAddPokemon={handleAddPokemon}
-          onClose={() => setShowPopup(false)}
-        />
-      )}
-
-      {showAddPopup && (
+      {popupType === "add" && (
         <PokemonSearchPopup
           onAddPokemon={(pokemon) => {
             onAddPokemon(pokemon);
-            setShowAddPopup(false);
+            setPopupType(null);
           }}
-          onClose={() => setShowAddPopup(false)}
+          onClose={() => setPopupType(null)}
         />
       )}
 

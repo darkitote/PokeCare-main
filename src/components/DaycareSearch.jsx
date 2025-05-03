@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 const DaycareSearch = ({ onSearch, currentSearch }) => {
   const [inputValue, setInputValue] = useState(currentSearch);
 
-  // Sincroniza cuando cambia la prop
+  // Sincroniza cuando cambia la prop, solo si es diferente
   useEffect(() => {
-    setInputValue(currentSearch);
+    if (inputValue !== currentSearch) {
+      setInputValue(currentSearch);
+    }
   }, [currentSearch]);
 
   const handleChange = (e) => {
@@ -29,7 +31,7 @@ const DaycareSearch = ({ onSearch, currentSearch }) => {
         className="search-input"
       />
       {inputValue && (
-        <button onClick={handleClear} className="clear-search-btn">
+        <button onClick={handleClear} className="clear-search-btn" aria-label="Limpiar búsqueda">
           ×
         </button>
       )}

@@ -1,82 +1,82 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import PokemonCard from './PokemonCard';
+import PokemonSearchPopup from './PokemonSearchPopup';
+import { IoIosAddCircleOutline } from 'react-icons/io';
+import DaycareSearch from './DaycareSearch';
+import PokemonDetailsPopup from './PokemonDetailsPopup';
 
-const PokemonDetailsPopup = ({ pokemonId, onClose }) => {
-  const [pokemonDetails, setPokemonDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const PokemonDaycare = ({ pokemons, onRemovePokemon, onMovePokemon, onAddPokemon }) => {
+  const [popupType, setPopupType] = useState(null);
+  const [selectedPokemonId, setSelectedPokemonId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredPokemons, setFilteredPokemons] = useState([]);
 
+  // Optimizar el filtro de búsqueda
   useEffect(() => {
-    const fetchPokemonDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
-        setPokemonDetails(response.data);
-      } catch (err) {
-        setError('Error al cargar los detalles del Pokémon');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPokemonDetails();
-  }, [pokemonId]);
-
-  if (loading) return <div className="popup-loading">Cargando...</div>;
-  if (error) return <div className="popup-error">{error}</div>;
+    if (!searchTerm) {
+      setFilteredPokemons(pokemons);
+    } else {
+      setFilteredPokemons(pokemons.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase())));
+    }
+  }, [pokemons, searchTerm]);
 
   return (
-    <div className="pokemon-details-popup">
-      <button className="close-popup" onClick={onClose}>×</button>
-      
-      <div className="pokemon-header">
-        <img 
-          src={pokemonDetails.sprites.other['official-artwork'].front_default || 
-               pokemonDetails.sprites.front_default} 
-          alt={pokemonDetails.name}
-          className="pokemon-detail-image"
+    <div className="daycare-container">
+      <div className="daycare-header">
+        <div className="header-top-row">
+          <h2>Guardería ({pokemons.length})</h2>
+          <button 
+            className="add-pokemon-btn"
+            onClick={() => setPopupType("add")}
+            title="Agregar Pokémon"
+            aria-label="Agregar Pokémon a la guardería"
+          >
+            <IoIosAddCircleOutline className="add-icon"/>
+          </button>
+        </div>
+
+        <DaycareSearch onSearch={setSearchTerm} currentSearch={searchTerm} />
+      </div>
+
+      {popupType === "add" && (
+        <PokemonSearchPopup
+          onAddPokemon={(pokemon) => {
+            onAddPokemon(pokemon);
+            setPopupType(null);
+          }}
+          onClose={() => setPopupType(null)}
         />
-        <h2 className="pokemon-name">{pokemonDetails.name}</h2>
-        <div className="pokemon-types">
-          {pokemonDetails.types.map((type, index) => (
-            <span key={index} className={`type-badge type-${type.type.name}`}>
-              {type.type.name}
-            </span>
-          ))}
-        </div>
-      </div>
+      )}
 
-      <div className="pokemon-stats">
-        <h3>Estadísticas</h3>
-        <div className="stats-grid">
-          {pokemonDetails.stats.map((stat, index) => (
-            <div key={index} className="stat-item">
-              <span className="stat-name">{stat.stat.name}</span>
-              <div className="stat-bar-container">
-                <div 
-                  className="stat-bar" 
-                  style={{ width: `${Math.min(100, stat.base_stat)}%` }}
-                ></div>
-                <span className="stat-value">{stat.base_stat}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {selectedPokemonId && (
+        <PokemonDetailsPopup
+          pokemonId={selectedPokemonId}
+          onClose={() => setSelectedPokemonId(null)}
+        />
+      )}
 
-      <div className="pokemon-abilities">
-        <h3>Habilidades</h3>
-        <div className="abilities-list">
-          {pokemonDetails.abilities.map((ability, index) => (
-            <span key={index} className="ability-badge">
-              {ability.ability.name}
-            </span>
-          ))}
-        </div>
+      <div className="daycare-grid">
+        {filteredPokemons.length === 0 ? (
+          <p className="no-results">
+            {pokemons.length === 0 
+              ? 'No hay Pokémon en la guardería. ¡Agrega algunos!' 
+              : 'No se encontraron Pokémon que coincidan con la búsqueda'}
+          </p>
+        ) : (
+          filteredPokemons.map((pokemon, index) => (
+            <PokemonCard
+              key={pokemon.id}
+              pokemon={pokemon}
+              index={index}
+              onRemove={onRemovePokemon}
+              onMove={onMovePokemon}
+              onClick={setSelectedPokemonId}
+            />
+          ))
+        )}
       </div>
     </div>
   );
 };
 
-export default PokemonDetailsPopup;
+export default PokemonDaycare;

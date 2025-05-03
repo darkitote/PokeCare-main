@@ -1,18 +1,22 @@
-# Usa una imagen base de Node.js
-FROM node:18-alpine
+# Etapa 1: Construcción
+FROM node:18-alpine AS builder
 
-# Establece el directorio de trabajo
 WORKDIR /app
-
-# Copia los archivos del proyecto
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci --production
 
 # Copia el resto del código
 COPY . .
 
-# Expone el puerto 3000
-EXPOSE 3000
+# Etapa 2: Imagen más ligera
+FROM node:18-slim
 
-# Ejecuta la aplicación
+WORKDIR /app
+COPY --from=builder /app /app
+
+# Crear un usuario sin privilegios para mayor seguridad
+RUN addgroup --system app && adduser --system --ingroup app app
+USER app
+
+EXPOSE 3000
 CMD ["npm", "run", "dev"]

@@ -6,29 +6,25 @@ import './App.css';
 
 function App() {
   const [pokemons, setPokemons] = useState([]);
-  
+  const [errorMessage, setErrorMessage] = useState('');
+
   const addPokemon = (pokemonData) => {
     if (pokemons.some(p => p.id === pokemonData.id)) {
-      alert('Este Pokémon ya está en la guardería');
+      setErrorMessage('Este Pokémon ya está en la guardería');
       return;
     }
     
-    setPokemons(prev => [...prev, {
-      ...pokemonData,
-      // Asegurar que siempre tenga un nickname
-      nickname: pokemonData.name
-    }]);
+    setPokemons(prev => prev.concat({ ...pokemonData, nickname: pokemonData.name }));
+    setErrorMessage('');
   };
 
-
   const removePokemon = (id) => {
-    setPokemons(pokemons.filter(pokemon => pokemon.id !== id));
+    setPokemons(prev => prev.filter(pokemon => pokemon.id !== id));
   };
 
   const movePokemon = (dragIndex, hoverIndex) => {
-    const draggedPokemon = pokemons[dragIndex];
     const updatedPokemons = [...pokemons];
-    updatedPokemons.splice(dragIndex, 1);
+    const [draggedPokemon] = updatedPokemons.splice(dragIndex, 1);
     updatedPokemons.splice(hoverIndex, 0, draggedPokemon);
     setPokemons(updatedPokemons);
   };
@@ -42,6 +38,7 @@ function App() {
         </header>
         
         <div className="main-content">
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <PokemonDaycare 
             pokemons={pokemons} 
             onRemovePokemon={removePokemon} 
