@@ -14,6 +14,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsDir: "assets",
+    manifest: true, // 🔹 Esto garantiza que Vite genere `manifest.json`
     rollupOptions: {
       output: {
         entryFileNames: 'assets/[name].js',

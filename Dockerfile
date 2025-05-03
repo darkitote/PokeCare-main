@@ -25,5 +25,5 @@ RUN npm run build
 # 9️⃣ Exponemos el puerto 3000
 EXPOSE 3000  
 
-# 🔟 Usamos `server.js` para servir los archivos correctamente
+# 🔟 Usamos `server.cjs` para servir los archivos correctamente
 CMD ["node", "server.cjs"]
