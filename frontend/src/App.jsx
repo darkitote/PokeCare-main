@@ -13,10 +13,7 @@ function App() {
       return;
     }
 
-    setPokemons(prev => [...prev, {
-      ...pokemonData,
-      nickname: pokemonData.name
-    }]);
+    setPokemons(prev => [...prev, { ...pokemonData, nickname: pokemonData.name }]);
   };
 
   const removePokemon = (id) => {

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poke-care-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: poke-care-frontend
+  template:
+    metadata:
+      labels:
+        app: poke-care-frontend
+    spec:
+      containers:
+      - name: poke-care-frontend
+        image: darkitote/pokecare-frontend:latest
+        ports:
+        - containerPort: 80
+        envFrom:
+          - configMapRef:
+              name: poke-care-config

@@ -18,7 +18,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "src/main.jsx",
-        index: "index.html" // ✅ Asegura que `index.html` se incluya en `dist/`
+        index: "index.html"
       },
       output: {
         entryFileNames: 'assets/[name].js',
