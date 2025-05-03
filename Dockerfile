@@ -22,13 +22,8 @@ ENV BASE_URL="/PokeCare-main/"
 # 8️⃣ Compilamos la aplicación
 RUN npm run build  
 
-# 9️⃣ Instalamos `serve` para servir la aplicación en producción
-RUN npm install -g serve  
-
-# 🔟 Exponemos el puerto 3000
+# 9️⃣ Exponemos el puerto 3000
 EXPOSE 3000  
 
-# 🔥 Usamos `serve` para servir los archivos correctamente en el puerto 3000
-CMD ["serve", "-s", "dist", "-l", "3000"]
-
-# 🔥 Usamos `serve` para servir los archivos correctamente
+# 🔟 Usamos `server.js` para servir los archivos correctamente
+CMD ["node", "server.js"]
