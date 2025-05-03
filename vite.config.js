@@ -1,14 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="./vite.svg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeCare</title>
-    <base href="/"> <!-- Asegura rutas correctas en Docker/Kubernetes -->
-</head>
-<body>
-    <div id="root"></div>
-    <script type="module" src="/main.jsx"></script>
-</body>
-</html>
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  base: process.env.BASE_URL || "/PokeCare-main/",
+  server: {
+    port: 3000,
+    host: "0.0.0.0", // Permite conexiones externas dentro del contenedor
+    hmr: {
+      clientPort: 443, // Ajusta WebSocket si usas HTTPS en Minikube
+    },
+  },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets"
+  }
+});
