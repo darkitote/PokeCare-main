@@ -6,13 +6,20 @@ export default defineConfig({
   base: process.env.BASE_URL || "/PokeCare-main/",
   server: {
     port: 3000,
-    host: "0.0.0.0", // Permite conexiones externas dentro del contenedor
+    host: "0.0.0.0",
     hmr: {
-      clientPort: 443, // Ajusta WebSocket si usas HTTPS en Minikube
+      clientPort: 443,
     },
   },
   build: {
     outDir: "dist",
-    assetsDir: "assets"
+    assetsDir: "assets",
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/[name].js',
+        chunkFileNames: 'assets/[name].js',
+        assetFileNames: 'assets/[name].[ext]'
+      }
+    }
   }
 });
