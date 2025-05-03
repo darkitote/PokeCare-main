@@ -3,11 +3,15 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 
+# 🔥 Instalamos dependencias desde cero dentro de Docker
 RUN npm install --production --legacy-peer-deps
 
 COPY . .
 
-# 🔥 Compilamos la aplicación antes de cambiar al usuario final
+# 🔥 Aseguramos que esbuild se instala correctamente en Linux
+RUN npm rebuild esbuild
+
+# 🔥 Compilamos la aplicación
 RUN npm run build
 
 EXPOSE 3000
