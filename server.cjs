@@ -43,3 +43,9 @@ app.use((req, res, next) => {
     return res.status(404).json({ error: "Ruta no encontrada" });
   }
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// 🔹 Iniciar el servidor en el puerto 3000
+app.listen(3000, () => {
+  console.log(`✅ Servidor corriendo en puerto 3000 con BASE_URL ${BASE_URL} 🚀🔥`);
+});

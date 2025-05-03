@@ -1,3 +1,6 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react'; // 🔹 Asegurar la importación de React
+
 export default defineConfig({
   plugins: [react()],
   base: process.env.BASE_URL || "/PokeCare-main/",
