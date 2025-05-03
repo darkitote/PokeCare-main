@@ -10,13 +10,13 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 # 4️⃣ Ajustamos permisos para evitar errores de acceso
 RUN chown -R appuser:appgroup /app  
 
-# 5️⃣ Copiamos los archivos de configuración, pero NO `node_modules`
+# 5️⃣ Copiamos los archivos de configuración **pero NO `node_modules`**
 COPY package.json package-lock.json ./  
 
-# 6️⃣ Instalamos las dependencias dentro del contenedor (evita errores de compatibilidad)
+# 6️⃣ Instalamos las dependencias dentro del contenedor
 RUN npm ci --production  
 
-# 7️⃣ Reinstalamos `esbuild` para garantizar compatibilidad con Linux
+# 7️⃣ Reinstalamos `esbuild` para que sea compatible con Linux
 RUN npm rebuild esbuild  
 
 # 8️⃣ Copiamos el código de la aplicación después de instalar dependencias
@@ -28,7 +28,7 @@ RUN chown -R appuser:appgroup /app
 # 🔟 Cambiamos al usuario seguro para evitar privilegios root
 USER appuser  
 
-# 11️⃣ Compilamos la aplicación
+# 11️⃣ Compilamos la aplicación dentro del contenedor, ahora sin errores
 RUN npm run build  
 
 # 12️⃣ Exponemos el puerto 3000
