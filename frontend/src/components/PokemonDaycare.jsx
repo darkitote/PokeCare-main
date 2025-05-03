@@ -10,15 +10,14 @@ const PokemonDaycare = ({ pokemons, onRemovePokemon, onMovePokemon, onAddPokemon
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [selectedPokemonId, setSelectedPokemonId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredPokemons, setFilteredPokemons] = useState([]);
+  const [filteredPokemons, setFilteredPokemons] = useState([...pokemons]);
 
   // Efecto principal para sincronización
   useEffect(() => {
-    setFilteredPokemons(
-      searchTerm
-        ? pokemons.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-        : pokemons
-    );
+    const filtered = searchTerm 
+      ? pokemons.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      : [...pokemons];
+    setFilteredPokemons(filtered);
   }, [pokemons, searchTerm]);
 
   // Función para agregar nuevo Pokémon

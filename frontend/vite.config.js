@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/PokeCare-main/",
+  base: "/",  
   server: {
     port: 3000,
     host: "0.0.0.0",
@@ -16,16 +16,14 @@ export default defineConfig({
     assetsDir: "assets",
     manifest: true,
     rollupOptions: {
-      input: {
-        main: "src/main.jsx",
-        index: "index.html"
-      },
+      input: "src/index.html", 
+      main: "src/main.jsx", // ✅ Asegura que `index.html` esté en `dist/`
       output: {
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]',
-      }
-    }
+        entryFileNames: "assets/[name].js",
+        chunkFileNames: "assets/[name].js",
+        assetFileNames: "assets/[name].[ext]",
+      },
+    },
   },
-  cacheDir: "node_modules/.vite"
+  cacheDir: "node_modules/.vite",
 });

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: poke-care-backend
-        image: darkitote/pokecare:latest
+        image: darkitote/pokecare-backend:latest
         ports:
         - containerPort: 3000
         envFrom:

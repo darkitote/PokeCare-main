@@ -11,4 +11,4 @@ COPY . .
 
 # 🔹 Exponer el puerto 3000 y ejecutar el servidor  
 EXPOSE 3000  
-CMD ["node", "server.cjs"]
+CMD ["node", "server.mjs"]
