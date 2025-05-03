@@ -4,29 +4,23 @@ FROM node:18-alpine AS builder
 # 2️⃣ Establecemos el directorio de trabajo
 WORKDIR /app  
 
-# 3️⃣ Creamos un usuario sin privilegios para mejorar la seguridad
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup  
-
-# 4️⃣ Ajustamos permisos para evitar errores de acceso
-RUN chown -R appuser:appgroup /app  
-
-# 5️⃣ Copiamos los archivos de configuración **pero NO `node_modules`**
+# 3️⃣ Copiamos los archivos de configuración (pero NO `node_modules`)
 COPY package.json package-lock.json ./  
 
-# 6️⃣ Instalamos las dependencias dentro del contenedor
+# 4️⃣ Instalamos las dependencias dentro del contenedor
 RUN npm ci --production  
 
-# 7️⃣ Reinstalamos `esbuild` para que sea compatible con Linux
-RUN npm rebuild esbuild  
+# 5️⃣ **Forzamos la instalación de `esbuild` directamente en la arquitectura Linux**
+RUN npm uninstall esbuild && npm install esbuild --platform=linux-arm64  
 
-# 8️⃣ Copiamos el código de la aplicación después de instalar dependencias
+# 6️⃣ Copiamos el código de la aplicación después de instalar dependencias
 COPY . .  
 
-# 9️⃣ Ajustamos permisos nuevamente para evitar problemas al ejecutar el servidor
-RUN chown -R appuser:appgroup /app  
+# 7️⃣ Ajustamos permisos nuevamente para evitar problemas al ejecutar el servidor
+RUN chown -R node:node /app  
 
 # 🔟 Cambiamos al usuario seguro para evitar privilegios root
-USER appuser  
+USER node  
 
 # 11️⃣ Compilamos la aplicación dentro del contenedor, ahora sin errores
 RUN npm run build  
