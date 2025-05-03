@@ -1,20 +1,23 @@
 FROM node:18-alpine AS builder  
 WORKDIR /app  
 
-# Copiar archivos y construir la aplicación
+# 🔹 Copiar archivos fuente, pero sin `node_modules`
 COPY package.json package-lock.json ./
-RUN npm install --omit=dev  
 
+# 🔹 Instalar dependencias dentro del contenedor con `esbuild` para Linux
+RUN npm install --omit=dev  
+RUN npm rebuild esbuild  
+
+# 🔹 Copiar el código fuente después de instalar dependencias
 COPY . .  
+
+# 🔹 Ejecutar la compilación
 RUN npm run build  
 
-# 🔹 Copiar `index.html` dentro de `dist/`
-RUN cp index.html dist/index.html  
-
-# Ajustar permisos y usuario seguro
+# 🔹 Ajustar permisos y usuario seguro
 RUN chown -R node:node /app  
 USER node  
 
-# Exponer el puerto y ejecutar el servidor
+# 🔹 Exponer el puerto y ejecutar el servidor
 EXPOSE 3000  
 CMD ["node", "server.cjs"]
