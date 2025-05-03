@@ -4,37 +4,11 @@ const app = express();
 
 const BASE_URL = "/PokeCare-main";
 
-// 🔹 Servir archivos estáticos correctamente
-app.use(BASE_URL + '/assets', express.static(path.join(__dirname, 'dist/assets'), {
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    }
-    if (filePath.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    }
-    if (filePath.endsWith('.json')) {
-      res.setHeader('Content-Type', 'application/json');
-    }
-    if (filePath.endsWith('.png')) {
-      res.setHeader('Content-Type', 'image/png');
-    }
-    if (filePath.endsWith('.svg')) {
-      res.setHeader('Content-Type', 'image/svg+xml');
-    }
-  }
-}));
+// 🔹 Asegurar que los archivos estáticos se sirvan correctamente
+app.use(BASE_URL, express.static(path.join(__dirname, 'dist')));
 
-// 🔹 Servir `index.html` en la ruta principal
-app.get(BASE_URL + '/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-// 🔹 Manejo de rutas desconocidas con una respuesta clara
-app.use((req, res, next) => {
-  if (!req.path.startsWith(BASE_URL)) {
-    return res.status(404).json({ error: "Ruta no encontrada" });
-  }
+// 🔹 Servir `index.html` correctamente desde `dist/`
+app.get(BASE_URL + '/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
