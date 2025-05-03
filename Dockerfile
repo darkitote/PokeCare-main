@@ -2,17 +2,13 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci --production --unsafe-perm
+
+RUN npm ci --production
 
 COPY . .
 
-# 🔥 SOLUCIÓN: Instalar dependencias antes de cambiar de usuario
-RUN addgroup --system app && adduser --system --ingroup app app
-
-# Asignamos permisos correctos antes de cambiar de usuario
-RUN chown -R app:app /app
-
-USER app
+# 🔥 Compilamos la aplicación antes de cambiar al usuario final
+RUN npm run build
 
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "preview"]
