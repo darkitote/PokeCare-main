@@ -14,10 +14,11 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsDir: "assets",
-    manifest: "assets/manifest.json", // ✅ Forzar la ubicación correcta
+    manifest: true,
     rollupOptions: {
       input: {
-        main: "src/main.jsx", // 🔹 Asegura que `src/main.jsx` se incluya en el `manifest.json`
+        main: "src/main.jsx",
+        index: "index.html" // ✅ Asegura que `index.html` se incluya en `dist/`
       },
       output: {
         entryFileNames: 'assets/[name].js',
