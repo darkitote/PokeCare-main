@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     host: "0.0.0.0",
     proxy: {
-      "/api": "http://10.101.17.41:3000" // Redirección al backend
+      "/api": "http://poke-care-backend.default.svc.cluster.local:3000" // Redirección al backend
     },
     hmr: {
       clientPort: 3000,
