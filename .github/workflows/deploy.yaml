@@ -35,5 +35,7 @@ jobs:
       run: echo "GitHub authentication set"
 
     - name: Deploy application using Helm
+      env:
+        KUBECONFIG: $HOME/.kube/config
       run: |
         helm upgrade --install pokecare ./pokecare-chart --namespace default --wait
