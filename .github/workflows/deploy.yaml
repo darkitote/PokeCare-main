@@ -24,12 +24,17 @@ jobs:
 
     - name: Configure Kubernetes credentials
       run: |
+        mkdir -p $HOME/.kube
         echo "${{ secrets.MY_KUBECONFIG }}" > $HOME/.kube/config
+        chmod 600 $HOME/.kube/config  # Asegura que el archivo tenga permisos correctos
 
     - name: Setup authentication for GitHub
-      run: |
-        export GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+      run: echo "GitHub authentication set"
 
     - name: Deploy application using Helm
+      env:
+        KUBECONFIG: $HOME/.kube/config
       run: |
-        helm upgrade --install pokecare ./pokecare-chart --namespace default
+        helm upgrade --install pokecare ./pokecare-chart --namespace default --wait
