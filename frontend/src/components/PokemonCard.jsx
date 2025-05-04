@@ -25,7 +25,7 @@ const PokemonCard = ({ pokemon, index, onRemove, onMove, onClick }) => {
     e.stopPropagation();
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/pokemon/${pokemon.id}`);
-      onRemove(pokemon.id); // Actualiza la lista después de eliminar en el backend
+      onRemove(pokemon.id); 
     } catch (error) {
       console.error("Error al eliminar Pokémon:", error);
     }

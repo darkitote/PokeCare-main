@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: poke-care-frontend
 spec:
-  replicas: 2
+  replicas: 3  
   selector:
     matchLabels:
       app: poke-care-frontend
@@ -20,12 +20,20 @@ spec:
         envFrom:
           - configMapRef:
               name: poke-care-config
+        resources:  
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
         readinessProbe:
           httpGet:
             path: /
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 10
+          failureThreshold: 3  
           
         livenessProbe:
           httpGet:
@@ -33,3 +41,4 @@ spec:
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 15
+          failureThreshold: 5  

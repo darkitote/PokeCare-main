@@ -4,7 +4,6 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 
-# Segunda etapa: imagen más liviana sin archivos innecesarios
 FROM node:18-alpine
 WORKDIR /app
 COPY --from=builder /app ./

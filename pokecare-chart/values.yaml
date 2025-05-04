@@ -1,0 +1,23 @@
+image:
+  backend:
+    repository: darkitote/pokecare-backend
+    tag: latest
+  frontend:
+    repository: darkitote/pokecare-frontend
+    tag: latest
+
+service:
+  backend:
+    type: ClusterIP
+    port: 3000
+  frontend:
+    type: NodePort
+    port: 32010
+
+deployment:
+  backend:
+    replicas: 1
+    containerPort: 3000
+  frontend:
+    replicas: 1
+    containerPort: 80
