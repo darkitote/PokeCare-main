@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -27,6 +27,7 @@ jobs:
         mkdir -p $HOME/.kube
         echo "${{ secrets.MY_KUBECONFIG }}" > $HOME/.kube/config
         chmod 600 $HOME/.kube/config  # Asegura que el archivo tenga permisos correctos
+        export KUBECONFIG=$HOME/.kube/config  # Establece KUBECONFIG globalmente
 
     - name: Setup authentication for GitHub
       env:
@@ -34,7 +35,5 @@ jobs:
       run: echo "GitHub authentication set"
 
     - name: Deploy application using Helm
-      env:
-        KUBECONFIG: $HOME/.kube/config
       run: |
         helm upgrade --install pokecare ./pokecare-chart --namespace default --wait
