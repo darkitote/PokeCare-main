@@ -1,15 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "pokecare-chart.fullname" . }}
-  labels:
-    {{- include "pokecare-chart.labels" . | nindent 4 }}
+  name: poke-care-frontend
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.frontend.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    - port: {{ .Values.service.frontend.port }}
+      targetPort: {{ .Values.deployment.frontend.containerPort }}
   selector:
-    {{- include "pokecare-chart.selectorLabels" . | nindent 4 }}
+    app: poke-care-frontend

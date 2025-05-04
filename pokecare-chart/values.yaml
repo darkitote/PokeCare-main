@@ -8,10 +8,10 @@ image:
 
 service:
   backend:
-    type: ClusterIP
+    type: "ClusterIP"
     port: 3000
   frontend:
-    type: NodePort
+    type: "NodePort"
     port: 32010
 
 deployment:
@@ -38,9 +38,13 @@ deployment:
         cpu: "500m"
 
 serviceAccount:
-  create: false  
+  create: false
+
 ingress:
-  enabled: false  
+  enabled: false
 
 autoscaling:
-  enabled: false  
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
