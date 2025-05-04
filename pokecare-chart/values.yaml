@@ -16,8 +16,26 @@ service:
 
 deployment:
   backend:
-    replicas: 1
+    replicas: 2  
     containerPort: 3000
+    resources:  
+      requests:
+        memory: "128Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
   frontend:
-    replicas: 1
+    replicas: 2 
     containerPort: 80
+    resources:  
+      requests:
+        memory: "128Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"
+
+serviceAccount:
+  create: false  
