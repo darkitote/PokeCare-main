@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     host: "0.0.0.0",
     proxy: {
-      "/api": process.env.VITE_API_URL || "http://poke-care-backend.default.svc.cluster.local:3000"
+      "/api": process.env.VITE_API_URL || "http://localhost:3000"
     },
     hmr: {
       clientPort: 3000
