@@ -26,10 +26,9 @@ jobs:
       run: |
         echo "${{ secrets.MY_KUBECONFIG }}" > $HOME/.kube/config
 
-    - name: Authenticate with GitHub
-      uses: octokit/auth-action@v3.9.0
-      with:
-        token: ${{ secrets.MY_GITHUB_TOKEN }}
+    - name: Setup authentication for GitHub
+      run: |
+        export GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }}
 
     - name: Deploy application using Helm
       run: |
