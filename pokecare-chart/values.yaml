@@ -16,9 +16,9 @@ service:
 
 deployment:
   backend:
-    replicas: 2  
+    replicas: 2
     containerPort: 3000
-    resources:  
+    resources:
       requests:
         memory: "128Mi"
         cpu: "250m"
@@ -27,9 +27,9 @@ deployment:
         cpu: "500m"
 
   frontend:
-    replicas: 2 
+    replicas: 2
     containerPort: 80
-    resources:  
+    resources:
       requests:
         memory: "128Mi"
         cpu: "250m"
@@ -39,3 +39,8 @@ deployment:
 
 serviceAccount:
   create: false  
+ingress:
+  enabled: false  
+
+autoscaling:
+  enabled: false  
