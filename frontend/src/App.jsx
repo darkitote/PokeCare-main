@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import PokemonDaycare from './components/PokemonDaycare';
@@ -7,17 +8,12 @@ import './App.css';
 function App() {
   const [pokemons, setPokemons] = useState([]);
 
+  // Cargar Pokémon desde el backend al inicio
   useEffect(() => {
     const fetchPokemons = async () => {
       try {
-        const BASE_URL = import.meta.env.VITE_API_URL;
-        const response = await fetch(`${BASE_URL}/pokemons?limit=20`);
-        const data = await response.json();
-        setPokemons(data.map(pokemon => ({
-          id: pokemon.id,
-          name: pokemon.name,
-          sprites: pokemon.sprites,
-        })));
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/pokemon`);
+        setPokemons(response.data);
       } catch (error) {
         console.error("Error al obtener Pokémon:", error);
       }
@@ -26,16 +22,27 @@ function App() {
     fetchPokemons();
   }, []);
 
-  const addPokemon = (pokemonData) => {
+  const addPokemon = async (pokemonData) => {
     if (pokemons.some(p => p.id === pokemonData.id)) {
-      console.error(`El Pokémon ${pokemonData.name} ya está en la guardería.`);
+      alert('Este Pokémon ya está en la guardería');
       return;
     }
-    setPokemons(prev => [...prev, { ...pokemonData, nickname: pokemonData.name }]);
+
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/pokemon`, pokemonData);
+      setPokemons(prev => [...prev, response.data]);
+    } catch (error) {
+      console.error("Error al agregar Pokémon:", error);
+    }
   };
 
-  const removePokemon = (id) => {
-    setPokemons(pokemons.filter(pokemon => pokemon.id !== id));
+  const removePokemon = async (id) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/pokemon/${id}`);
+      setPokemons(pokemons.filter(pokemon => pokemon.id !== id));
+    } catch (error) {
+      console.error("Error al eliminar Pokémon:", error);
+    }
   };
 
   const movePokemon = (dragIndex, hoverIndex) => {
@@ -49,9 +56,11 @@ function App() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="app">
+        <title>PokeCare</title>
         <header className="app-header">
-          <h1>PokeCare - Guardería Pokémon</h1>
+          <h1>Guardería Pokémon</h1>
         </header>
+
         <div className="main-content">
           <PokemonDaycare 
             pokemons={pokemons} 

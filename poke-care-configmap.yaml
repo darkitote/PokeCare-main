@@ -4,3 +4,4 @@ metadata:
   name: poke-care-config
 data:
   REACT_APP_BASE_URL: "/PokeCare-main/"
+  VITE_API_URL: "http://poke-care-backend.default.svc.cluster.local:3000"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PokemonCard from './PokemonCard';
 import PokemonSearchPopup from './PokemonSearchPopup';
 import { IoIosAddCircleOutline } from 'react-icons/io';
@@ -7,12 +8,10 @@ import PokemonDetailsPopup from './PokemonDetailsPopup';
 
 const PokemonDaycare = ({ pokemons, onRemovePokemon, onMovePokemon, onAddPokemon }) => {
   const [showPopup, setShowPopup] = useState(false);
-  const [showAddPopup, setShowAddPopup] = useState(false);
   const [selectedPokemonId, setSelectedPokemonId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPokemons, setFilteredPokemons] = useState([...pokemons]);
 
-  // Efecto principal para sincronización
   useEffect(() => {
     const filtered = searchTerm 
       ? pokemons.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -20,11 +19,24 @@ const PokemonDaycare = ({ pokemons, onRemovePokemon, onMovePokemon, onAddPokemon
     setFilteredPokemons(filtered);
   }, [pokemons, searchTerm]);
 
-  // Función para agregar nuevo Pokémon
-  const handleAddPokemon = (pokemon) => {
-    onAddPokemon(pokemon); // Actualiza la lista principal
-    setSearchTerm(''); // Resetea el filtro
-    setShowPopup(false);
+  const handleAddPokemon = async (pokemon) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/pokemon`, pokemon);
+      onAddPokemon(response.data); // Actualiza el estado con la respuesta del backend
+      setSearchTerm('');
+      setShowPopup(false);
+    } catch (error) {
+      console.error("Error al agregar Pokémon:", error);
+    }
+  };
+
+  const handleRemovePokemon = async (pokemonId) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/pokemon/${pokemonId}`);
+      onRemovePokemon(pokemonId);
+    } catch (error) {
+      console.error("Error al eliminar Pokémon:", error);
+    }
   };
 
   return (
@@ -51,16 +63,6 @@ const PokemonDaycare = ({ pokemons, onRemovePokemon, onMovePokemon, onAddPokemon
         />
       )}
 
-      {showAddPopup && (
-        <PokemonSearchPopup
-          onAddPokemon={(pokemon) => {
-            onAddPokemon(pokemon);
-            setShowAddPopup(false);
-          }}
-          onClose={() => setShowAddPopup(false)}
-        />
-      )}
-
       {selectedPokemonId && (
         <PokemonDetailsPopup
           pokemonId={selectedPokemonId}
@@ -81,7 +83,7 @@ const PokemonDaycare = ({ pokemons, onRemovePokemon, onMovePokemon, onAddPokemon
               key={pokemon.id}
               pokemon={pokemon}
               index={index}
-              onRemove={onRemovePokemon}
+              onRemove={handleRemovePokemon}
               onMove={onMovePokemon}
               onClick={setSelectedPokemonId}
             />

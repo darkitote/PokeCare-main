@@ -8,17 +8,17 @@ export default defineConfig({
     port: 3000,
     host: "0.0.0.0",
     proxy: {
-      "/api": "http://poke-care-backend.default.svc.cluster.local:3000" // Redirección al backend
+      "/api": process.env.VITE_API_URL || "http://poke-care-backend.default.svc.cluster.local:3000"
     },
     hmr: {
-      clientPort: 3000,
+      clientPort: 3000
     }
   },
   build: {
     outDir: "dist",
     assetsDir: "assets",
     manifest: true,
-    publicDir: false,
+    publicDir: "public", // Asegura que los archivos estáticos se sirvan correctamente
     rollupOptions: {
       input: "index.html",
       output: {
@@ -30,3 +30,4 @@ export default defineConfig({
   },
   cacheDir: "node_modules/.vite"
 });
+

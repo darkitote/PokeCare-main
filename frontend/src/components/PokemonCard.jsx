@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import axios from 'axios';
 
 const PokemonCard = ({ pokemon, index, onRemove, onMove, onClick }) => {
   const [{ isDragging }, drag] = useDrag({
@@ -20,11 +21,31 @@ const PokemonCard = ({ pokemon, index, onRemove, onMove, onClick }) => {
     },
   });
 
+  const handleRemove = async (e) => {
+    e.stopPropagation();
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/pokemon/${pokemon.id}`);
+      onRemove(pokemon.id); // Actualiza la lista después de eliminar en el backend
+    } catch (error) {
+      console.error("Error al eliminar Pokémon:", error);
+    }
+  };
+
   return (
-    <div ref={(node) => drag(drop(node))} className={`pokemon-card ${isDragging ? 'dragging' : ''}`} onClick={() => onClick(pokemon.id)}>
-      <img src={`${import.meta.env.VITE_API_URL}${pokemon.sprites.front_default}`} alt={pokemon.name} className="pokemon-image" />
+    <div
+      ref={(node) => drag(drop(node))}
+      className={`pokemon-card ${isDragging ? 'dragging' : ''}`}
+      onClick={() => onClick(pokemon.id)}
+    >
+      <img 
+        src={pokemon.sprites.front_default} 
+        alt={pokemon.name} 
+        className="pokemon-image"
+      />
       <h3>{pokemon.name}</h3>
-      <button onClick={(e) => { e.stopPropagation(); onRemove(pokemon.id); }} className="remove-btn">Liberar</button>
+      <button onClick={handleRemove} className="remove-btn">
+        Liberar
+      </button>
     </div>
   );
 };
